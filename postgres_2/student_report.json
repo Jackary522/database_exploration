@@ -1,0 +1,30 @@
+[
+    {
+        "stuid": 140001,
+        "firstname": "Hatton",
+        "lastname": "Jack",
+        "majordesc": "CSC",
+        "credits": 102
+    },
+    {
+        "stuid": 100682,
+        "firstname": "Hatton",
+        "lastname": "Shanisha",
+        "majordesc": "History",
+        "credits": 15
+    },
+    {
+        "stuid": 113840,
+        "firstname": "Hatton",
+        "lastname": "Cherish",
+        "majordesc": "History",
+        "credits": 48
+    },
+    {
+        "stuid": 128774,
+        "firstname": "Hatton",
+        "lastname": "Emmanuelle",
+        "majordesc": "Math",
+        "credits": 30
+    }
+]

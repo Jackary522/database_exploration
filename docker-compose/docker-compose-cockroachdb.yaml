@@ -1,0 +1,43 @@
+version: '3.8'
+services: 
+    cockroachdb_db_container_01: 
+        image: cockroachdb/cockroach:latest
+        container_name: "cockroachdb_db_container_01"
+        hostname: "cockroachdb_db_container_01"
+        command: start --insecure --join=cockroachdb_db_container_01,cockroachdb_db_container_02,cockroachdb_db_container_03
+        ports:
+            - "26257:26257"
+            - "8080:8080"
+        networks:
+            - roachnet
+        volumes: 
+            - cockroachdb_01:/cockroach/cockroach-data
+    
+    cockroachdb_db_container_02: 
+        image: cockroachdb/cockroach:latest
+        command: start --insecure --join=cockroachdb_db_container_01,cockroachdb_db_container_02,cockroachdb_db_container_03
+        container_name: "cockroachdb_db_container_02"
+        hostname: "cockroachdb_db_container_02"
+        networks:
+            - roachnet
+        volumes: 
+            - cockroachdb_02:/cockroach/cockroach-data
+
+    cockroachdb_db_container_03: 
+        image: cockroachdb/cockroach:latest
+        command: start --insecure --join=cockroachdb_db_container_01,cockroachdb_db_container_02,cockroachdb_db_container_03
+        container_name: "cockroachdb_db_container_03"
+        hostname: "cockroachdb_db_container_03"
+        networks:
+            - roachnet
+        volumes: 
+            - cockroachdb_03:/cockroach/cockroach-data
+
+volumes: 
+    cockroachdb_01:
+    cockroachdb_02:
+    cockroachdb_03:
+    
+networks:
+    roachnet:
+        driver: bridge

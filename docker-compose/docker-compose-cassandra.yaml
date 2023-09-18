@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  cassandra_db_container:
+    image: cassandra:latest
+    container_name: "cassandra_db_container"
+    restart: always
+    ports:
+      - 9042:9042
+    environment:
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=password
+    volumes:
+      - ./out/cassandra_data:/var/lib/cassandra
