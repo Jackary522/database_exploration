@@ -1,0 +1,75 @@
+Assignment #5 - Redis
+
+All answers assume a bash terminal not the redis-cli tool. I chose to do this as my last answer relies on it.
+
+1. List all keys starting with 1008
+
+redis-cli keys 1008*
+
+ 1) "10084"
+ 2) "10080"
+ 3) "10085"
+ 4) "10081"
+ 5) "10086"
+ 6) "10082"
+ 7) "10088"
+ 8) "10089"
+ 9) "10083"
+10) "10087"
+
+2. Get all data for key 10250
+
+redis-cli lrange 10250 0 -1
+
+ 1) "Kursten"
+ 2) "Armistead"
+ 3) "314"
+ 4) "555-3708"
+ 5) "Armistead.Kursten-accessory@gmail.com"
+
+3. Get email for key 10300
+
+redis-cli lindex 10300 4
+
+ 1) "Lussier.Issa-graduation@gmail.com"
+
+4. Update the last name for key 10325 to Smith
+
+redis-cli lset 10325 1 "Smith"
+
+5. Get the last name by index for key 10325
+
+redis-cli lindex 10325 1
+
+ "Bowes" 
+
+6. Delete the key value record for key 10449
+
+redis-cli del 10449
+
+7. Replace key 10525 with the following data: 10525: ["John", "Doe", "555-3122", "Doe-John-energy@gmail.com"]
+
+redis-cli del 10525 && redis-cli rpush 10525 "John" "Doe" "555-3122" "Doe-John-energy@gmail.com"
+
+8. List just the first and last name for key 10511
+
+redis-cli lrange 10511 0 1
+
+ 1) "Nazario"
+ 2) "Cabrera" 
+
+9. Use an index to get the phone number for 10516
+
+redis-cli lindex 10516 3
+
+ "555-4202" 
+
+10. Add yourself to the Redis database
+
+max_key=`redis-cli keys '*' | sort -n | tail -n 1`; (( max_key++ )); redis-cli rpush $max_key "Jack" "Hatton" "801" "995-9348" "jack.hatton522@gmail.com"; redis-cli lrange $max_key 0 -1
+
+ 1) "Jack"
+ 2) "Hatton"
+ 3) "801"
+ 4) "995-9348"
+ 5) "jack.hatton522@gmail.com"

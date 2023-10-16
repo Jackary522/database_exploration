@@ -1,0 +1,54 @@
+use contacts;
+
+// 1
+db.contacts.find(
+    { area_code: "952", phone: "555-1095" }
+).projection(
+    { first_name: 1, last_name: 1, _id: 0 }
+);
+
+// 2
+db.contacts.find({ last_name: /^Long[a-z]*/ });
+
+// 3
+db.contacts.updateOne(
+    { first_name: "Kristiana", last_name: "Lammers" },
+    { $set: { first_name: "Kristiann" } }
+);
+
+// 4
+db.contacts.find({ first_name: "Jolie", last_name: "Mccrimmon" });
+
+// 5
+db.contacts.find({ email: "Marshal.Jonna-filters@yahoo.com" });
+
+// 6
+db.contacts.updateOne(
+    { email: "Glasco.Javone-dx@gmail.com" },
+    { $set: { email: "Glasco.Javone-dx@icloud.com" } }
+);
+
+// 7
+db.contacts.updateOne(
+    { first_name: "Kalvin", last_name: "Calton" },
+    { $set: { first_name: "Calvin" } }
+);
+
+// 8
+db.contacts.deleteOne(
+    { first_name: "Brihany", last_name: "Strang" }
+);
+
+// 9
+db.contacts.deleteOne(
+    { area_code: "249", phone: "555-9934", last_name: "Falconer" }
+);
+
+// 10
+db.contacts.insertOne(
+    { area_code: "801",
+      email: "jack.hatton522@gmail.com",
+      first_name: "Jack",
+      last_name: "Hatton",
+      phone: "995-9348" }
+);
