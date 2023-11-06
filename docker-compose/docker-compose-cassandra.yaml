@@ -3,7 +3,6 @@ services:
   cassandra_db_container:
     image: cassandra:latest
     container_name: "cassandra_db_container"
-    restart: always
     ports:
       - 9042:9042
     environment:

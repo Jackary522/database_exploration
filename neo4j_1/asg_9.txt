@@ -1,0 +1,72 @@
+
+1. Match all contact data for the last name 'Klug'
+
+MATCH (n:Contacts {lastname: "Klug"})
+RETURN n;
+
+
+2. Build a relationship for area code 312
+
+MATCH (a:Contacts),(b:Contacts)
+WHERE a.areacode = '312' AND b.areacode = '312'
+CREATE (a)-[r:AREACODE_312]->(b)
+RETURN r;
+
+
+3. Build a relationship for area code 801
+
+MATCH (a:Contacts),(b:Contacts)
+WHERE a.areacode = '801' AND b.areacode = '801'
+CREATE (a)-[r:AREACODE_801]->(b)
+RETURN r;
+
+
+4. Build a relationship for area code 415
+
+MATCH (a:Contacts),(b:Contacts)
+WHERE a.areacode = '415' AND b.areacode = '415'
+CREATE (a)-[r:AREACODE_415]->(b)
+RETURN r;
+
+
+5. Match all data for Contacts in 312
+
+MATCH (a:Contacts)-[r:AREACODE_312]->(b:Contacts)
+RETURN a;
+
+
+6. Match all data for Contacts in 801
+
+MATCH (a:Contacts)-[r:AREACODE_801]->(b:Contacts)
+RETURN a;
+
+
+7. Delete a relationship for area code 415
+
+MATCH (n)-[r:AREACODE_415]->()
+DELETE r;
+
+
+8. Match data for all Contacts not in area code 312
+
+MATCH (a:Contacts)
+WHERE NOT (a)-[:AREACODE_312]->()
+RETURN a;
+
+
+9. Use the relationship for area code 312 and the last name "Desouza" to return all the data
+
+MATCH (n:Contacts)-[r:AREACODE_312]->({lastname: 'Desouza'})
+RETURN n;
+
+
+10. Build a relationship for area code 385, match all contacts, return the first name, last name, and email. Order by last name.
+
+MATCH (a:Contacts), (b:Contacts)
+WHERE a.areacode = '385' AND b.areacode = '385'
+CREATE (a)-[r:AREACODE_385]->(b)
+RETURN r;
+
+MATCH (a:Contacts {areacode: '385'})
+RETURN a.firstname, a.lastname, a.email
+ORDER BY a.lastname;

@@ -1,0 +1,178 @@
+
+1. Return the first name and last name for the person with the area code equal to "952" and the phone number equal to "555-1095"?
+
+SELECT firstname, lastname FROM contacts.contacts_areacode WHERE areacode = '952' AND phone = '555-1095';
+
+ firstname | lastname
+-----------+----------
+   Joselin |   Staton
+
+
+2. Find everyone where their last name is "Long"?
+
+SELECT * FROM contacts.contacts_names WHERE lastname = 'Long';
+
+ lastname | firstname | contactid | areacode | email                      | phone    
+----------+-----------+-----------+----------+----------------------------+----------
+     Long |     Sonya |     10663 |      306 | Long.Sonya-odd@outlook.com | 555-5763
+
+
+3. Update the first name to 'Kristiana' where first name equals 'Kristiann' and last name equals 'Lammers'?
+
+*Note: I answered with some scripting so I am using bash
+
+data=$(cqlsh -e "SELECT contactid, firstname, lastname, areacode, phone, email FROM contacts.contacts_names WHERE firstname = 'Kristiann' AND lastname = 'Lammers';" | awk "NR==4")
+
+IFS="|" read -ra fields <<< "$data"
+
+contactid=$(echo "${fields[0]}" | xargs)
+firstname=$(echo "${fields[1]}" | xargs)
+lastname=$(echo "${fields[2]}" | xargs)
+areacode=$(echo "${fields[3]}" | xargs)
+phone=$(echo "${fields[4]}" | xargs)
+email=$(echo "${fields[5]}" | xargs)
+
+cqlsh -e "
+  BEGIN BATCH
+    UPDATE contacts.contacts SET firstname = 'Kristiana' WHERE contactid = $contactid;
+    UPDATE contacts.contacts_areacode SET firstname = 'Kristiana' WHERE areacode = '$areacode' AND phone = '$phone' AND contactid = $contactid;
+    UPDATE contacts.contacts_phone SET firstname = 'Kristiana' WHERE phone = '$phone' AND areacode = '$areacode' AND contactid = $contactid;
+    UPDATE contacts.contacts_email SET firstname = 'Kristiana' WHERE email = '$email' AND contactid = $contactid;
+    DELETE FROM contacts.contacts_names WHERE lastname = '$lastname' AND firstname = '$firstname' AND contactid = $contactid;
+    INSERT INTO contacts.contacts_names (lastname, firstname, contactid, areacode, phone, email)
+      VALUES ('$lastname', 'Kristiana', $contactid, '$areacode', '$phone', '$email');
+  APPLY BATCH;"
+
+
+4. Find the person with the first name 'Jolie' and last name 'Mccrimmon'?
+
+SELECT * FROM contacts.contacts_names WHERE firstname = 'Jolie' AND lastname = 'Mccrimmon';
+
+ lastname  | firstname | contactid | areacode | email                              | phone    
+-----------+-----------+-----------+----------+------------------------------------+----------
+ Mccrimmon |     Jolie |     10970 |      847 | Mccrimmon.Jolie-scotland@yahoo.com | 555-7786
+
+
+5. Find the person with the email 'Marshal.Jonna-filters@yahoo.com'?
+
+SELECT * FROM contacts.contacts_email WHERE email = 'Marshal.Jonna-filters@yahoo.com';
+
+ email                           | contactid | areacode | firstname | lastname | phone
+---------------------------------+-----------+----------+-----------+----------+----------
+ Marshal.Jonna-filters@yahoo.com |     10872 |      551 |     Jonna |  Marshal | 555-2955
+
+
+6. Update the email for the person with email 'Glasco.Javone-dx@gmail.com' to 'Glasco.Javone-dx@icloud.com'?
+
+*Note: I answered with some scripting so I am using bash
+
+data=$(cqlsh -e "SELECT contactid, firstname, lastname, areacode, phone, email FROM contacts.contacts_email WHERE email = 'Glasco.Javone-dx@gmail.com';" | awk "NR==4")
+
+IFS="|" read -ra fields <<< "$data"
+
+contactid=$(echo "${fields[0]}" | xargs)
+firstname=$(echo "${fields[1]}" | xargs)
+lastname=$(echo "${fields[2]}" | xargs)
+areacode=$(echo "${fields[3]}" | xargs)
+phone=$(echo "${fields[4]}" | xargs)
+email=$(echo "${fields[5]}" | xargs)
+
+cqlsh -e "
+  BEGIN BATCH
+    UPDATE contacts.contacts SET email = 'Glasco.Javone-dx@icloud.com' WHERE contactid = $contactid;
+    UPDATE contacts.contacts_names SET email = 'Glasco.Javone-dx@icloud.com' WHERE lastname = '$lastname' AND firstname = '$firstname' AND contactid = $contactid;
+    UPDATE contacts.contacts_areacode SET firstname = 'Kristiana' WHERE areacode = '$areacode' AND phone = '$phone' AND contactid = $contactid;
+    UPDATE contacts.contacts_phone SET firstname = 'Kristiana' WHERE phone = '$phone' AND areacode = '$areacode' AND contactid = $contactid;
+    DELETE FROM contacts.contacts_email WHERE email = 'Glasco.Javone-dx@gmail.com' AND contactid = $contactid;
+    INSERT INTO contacts.contacts_email (lastname, firstname, contactid, areacode, phone, email)
+      VALUES ('$lastname', '$firstname', $contactid, '$areacode', '$phone', 'Glasco.Javone-dx@icloud.com');
+  APPLY BATCH;"
+
+7. Change the first name to 'Calvin' where the first name is 'Kalvin' and the last name is 'Calton'?
+
+*Note: I answered with some scripting so I am using bash
+
+data=$(cqlsh -e "SELECT contactid, firstname, lastname, areacode, phone, email FROM contacts.contacts_names WHERE firstname = 'Kalvin' AND lastname = 'Calton';" | awk "NR==4")
+
+IFS="|" read -ra fields <<< "$data"
+
+contactid=$(echo "${fields[0]}" | xargs)
+firstname=$(echo "${fields[1]}" | xargs)
+lastname=$(echo "${fields[2]}" | xargs)
+areacode=$(echo "${fields[3]}" | xargs)
+phone=$(echo "${fields[4]}" | xargs)
+email=$(echo "${fields[5]}" | xargs)
+
+cqlsh -e "
+  BEGIN BATCH
+    UPDATE contacts.contacts SET firstname = 'Calvin' WHERE contactid = $contactid;
+    UPDATE contacts.contacts_areacode SET firstname = 'Calvin' WHERE areacode = '$areacode' AND phone = '$phone' AND contactid = $contactid;
+    UPDATE contacts.contacts_phone SET firstname = 'Calvin' WHERE phone = '$phone' AND areacode = '$areacode' AND contactid = $contactid;
+    UPDATE contacts.contacts_email SET firstname = 'Calvin' WHERE email = '$email' AND contactid = $contactid;
+    DELETE FROM contacts.contacts_names WHERE lastname = '$lastname' AND firstname = '$firstname' AND contactid = $contactid;
+    INSERT INTO contacts.contacts_names (lastname, firstname, contactid, areacode, phone, email)
+      VALUES ('$lastname', 'Calvin', $contactid, '$areacode', '$phone', '$email');
+  APPLY BATCH;"
+
+8. Delete the person with the first name 'Brihany' and the last name 'Strang'?
+
+*Note: I answered with some scripting so I am using bash
+
+data=$(cqlsh -e "SELECT contactid, firstname, lastname, areacode, phone, email FROM contacts.contacts_names WHERE firstname = 'Brihany' AND lastname = 'Strang';" | awk "NR==4")
+
+IFS="|" read -ra fields <<< "$data"
+
+contactid=$(echo "${fields[0]}" | xargs)
+firstname=$(echo "${fields[1]}" | xargs)
+lastname=$(echo "${fields[2]}" | xargs)
+areacode=$(echo "${fields[3]}" | xargs)
+phone=$(echo "${fields[4]}" | xargs)
+email=$(echo "${fields[5]}" | xargs)
+
+cqlsh -e "
+  BEGIN BATCH
+    DELETE FROM contacts.contacts WHERE contactid = $contactid;
+    DELETE FROM contacts.contacts_names WHERE lastname = '$lastname' AND firstname = '$firstname' AND contactid = $contactid;
+    DELETE FROM contacts.contacts_areacode WHERE areacode = '$areacode' AND phone = '$phone' AND contactid = $contactid;
+    DELETE FROM contacts.contacts_phone WHERE phone = '$phone' AND areacode = '$areacode' AND contactid = $contactid;
+    DELETE FROM contacts.contacts_email WHERE email = '$email' AND contactid = $contactid;
+  APPLY BATCH;"
+
+
+9. Delete the person with the area code of "249", the phone number of '555-9934' and the last name of 'Falconer'?
+
+*Note: This is a multistep process and includes bash scripting as well
+
+cqlsh -e "SELECT * FROM contacts.contacts_areacode WHERE areacode = '249' AND phone = '555-9934';"
+
+ areacode | phone    | contactid | email                                     | firstname   | lastname
+----------+----------+-----------+-------------------------------------------+-------------+----------
+      249 | 555-9934 |     10022 |      Losey.Kadeidra-excessive@outlook.com |    Kadeidra |    Losey
+      249 | 555-9934 |     10612 | Falconer.Alexzandria-volunteers@yahoo.com | Alexzandria | Falconer
+
+cqlsh -e "
+  BEGIN BATCH
+    DELETE FROM contacts.contacts WHERE contactid = 10612;
+    DELETE FROM contacts.contacts_names WHERE lastname = 'Falconer' AND firstname = 'Alexzandria' AND contactid = 10612;
+    DELETE FROM contacts.contacts_areacode WHERE areacode = '249' AND phone = '555-9934' AND contactid = 10612;
+    DELETE FROM contacts.contacts_phone WHERE phone = '555-9934' AND areacode = '249' AND contactid = 10612;
+    DELETE FROM contacts.contacts_email WHERE email = 'Falconer.Alexzandria-volunteers@yahoo.com' AND contactid = 10612;
+  APPLY BATCH;"
+
+
+10. Insert yourself as a contact. You need to add yourself to all tables.
+
+cqlsh -e "
+  BEGIN BATCH
+    INSERT INTO contacts.contacts VALUES (contactid, firstname, lastname, areacode, phone, email)
+      VALUES (66666, 'Jack', 'Hatton', '801', '995-9348', 'Jack.Hatton522@gmail.com');
+    INSERT INTO contacts.contacts_names VALUES (contactid, firstname, lastname, areacode, phone, email)
+      VALUES (66666, 'Jack', 'Hatton', '801', '995-9348', 'Jack.Hatton522@gmail.com');
+    INSERT INTO contacts.contacts_areacode VALUES (contactid, firstname, lastname, areacode, phone, email)
+      VALUES (66666, 'Jack', 'Hatton', '801', '995-9348', 'Jack.Hatton522@gmail.com');
+    INSERT INTO contacts.contacts_phone VALUES (contactid, firstname, lastname, areacode, phone, email)
+      VALUES (66666, 'Jack', 'Hatton', '801', '995-9348', 'Jack.Hatton522@gmail.com');
+    INSERT INTO contacts.contacts_email VALUES (contactid, firstname, lastname, areacode, phone, email)
+      VALUES (66666, 'Jack', 'Hatton', '801', '995-9348', 'Jack.Hatton522@gmail.com');
+  APPLY BATCH;"
+
