@@ -1,0 +1,158 @@
+1. Return the first name and last name for the person with the area code equal to "952" and the phone number equal to "555-1095"?
+
+jdbc:hive2://> select contacts.firstname, contacts.lastname from contacts where contacts.areacode = "952" and contacts.phone = "555-1095";
+23/12/07 01:39:05 [c55ccdef-331e-4710-989d-687f14931599 main]: WARN optimizer.SimpleFetchOptimizer: Cannot determine basic stats for table: contacts@contacts from metastore. Falling back.
+OK
++---------------------+--------------------+
+| contacts.firstname  | contacts.lastname  |
++---------------------+--------------------+
+| Joselin             | Staton             |
++---------------------+--------------------+
+1 row selected (0.87 seconds)
+
+2. Find everyone where their last name starts with "Long"?
+
+jdbc:hive2://> select * from contacts where contacts.lastname like "Long%";
+23/12/07 01:42:08 [c55ccdef-331e-4710-989d-687f14931599 main]: WARN optimizer.SimpleFetchOptimizer: Cannot determine basic stats for table: contacts@contacts from metastore. Falling back.
+OK
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------------+
+| contacts.contactid  | contacts.firstname  | contacts.lastname  | contacts.areacode  | contacts.phone  |            contacts.email            |
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------------+
+| 10030               | Darchelle           | Longley            | 839                | 555-3170        | Longley.Darchelle-prove@hotmail.com  |
+| 10663               | Sonya               | Long               | 306                | 555-5763        | Long.Sonya-odd@outlook.com           |
+| 10806               | Faline              | Longshore          | 530                | 555-8848        | Longshore.Faline-maryland@gmail.com  |
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------------+
+3 rows selected (0.502 seconds)
+
+3. Select the area codes that has more than 2 contacts?
+
+jdbc:hive2://> select contacts.areacode from contacts group by contacts.areacode having count(contacts.areacode) > 2;
+...
+| 931                |
+| 939                |
+| 945                |
+| 951                |
+| 952                |
+| 954                |
+| 970                |
+| 971                |
+| 985                |
++--------------------+
+163 rows selected (2.66 seconds)
+
+4. Find the person with the first name 'Jolie' and last name 'Mccrimmon'?
+
+jdbc:hive2://> select * from contacts where contacts.firstname = "Jolie" and contacts.lastname = "Mccrimmon";
+23/12/07 01:47:52 [c55ccdef-331e-4710-989d-687f14931599 main]: WARN optimizer.SimpleFetchOptimizer: Cannot determine basic stats for table: contacts@contacts from metastore. Falling back.
+OK
++---------------------+---------------------+--------------------+--------------------+-----------------+-------------------------------------+
+| contacts.contactid  | contacts.firstname  | contacts.lastname  | contacts.areacode  | contacts.phone  |           contacts.email            |
++---------------------+---------------------+--------------------+--------------------+-----------------+-------------------------------------+
+| 10970               | Jolie               | Mccrimmon          | 847                | 555-7786        | Mccrimmon.Jolie-scotland@yahoo.com  |
++---------------------+---------------------+--------------------+--------------------+-----------------+-------------------------------------+
+1 row selected (0.667 seconds)
+
+5. Find the person with the email 'Marshal.Jonna-filters@yahoo.com'?
+
+jdbc:hive2://> select * from contacts where contacts.email = "Marshal.Jonna-filters@yahoo.com";
+23/12/07 01:48:41 [c55ccdef-331e-4710-989d-687f14931599 main]: WARN optimizer.SimpleFetchOptimizer: Cannot determine basic stats for table: contacts@contacts from metastore. Falling back.
+OK
++---------------------+---------------------+--------------------+--------------------+-----------------+----------------------------------+
+| contacts.contactid  | contacts.firstname  | contacts.lastname  | contacts.areacode  | contacts.phone  |          contacts.email          |
++---------------------+---------------------+--------------------+--------------------+-----------------+----------------------------------+
+| 10872               | Jonna               | Marshal            | 551                | 555-2955        | Marshal.Jonna-filters@yahoo.com  |
++---------------------+---------------------+--------------------+--------------------+-----------------+----------------------------------+
+1 row selected (0.521 seconds)
+
+6. Select the first 25 contacts and sort them by last name?
+
+jdbc:hive2://> select * from contacts order by contacts.lastname limit 25;
+
++---------------------+---------------------+--------------------+--------------------+-----------------+------------------------------------------+
+| contacts.contactid  | contacts.firstname  | contacts.lastname  | contacts.areacode  | contacts.phone  |              contacts.email              |
++---------------------+---------------------+--------------------+--------------------+-----------------+------------------------------------------+
+| 10533               | Concetta            | Abbott             | 657                | 555-5601        | Abbott.Concetta-are@outlook.com          |
+| 10678               | Jazzmen             | Abbott             | 432                | 555-9196        | Abbott.Jazzmen-pink@yahoo.com            |
+| 10222               | Sheana              | Abner              | 447                | 555-3650        | Abner.Sheana-euro@gmail.com              |
+| 10738               | Kamau               | Abramson           | 224                | 555-3386        | Abramson.Kamau-newspapers@gmail.com      |
+| 10949               | Angelito            | Abreu              | 743                | 555-6825        | Abreu.Angelito-month@icloud.com          |
+| 10316               | Lenea               | Aceves             | 662                | 555-9309        | Aceves.Lenea-decline@icloud.com          |
+| 10268               | Dereka              | Ackerman           | 689                | 555-2500        | Ackerman.Dereka-filing@hotmail.com       |
+| 10906               | Duncan              | Adames             | 418                | 555-8543        | Adames.Duncan-seed@icloud.com            |
+| 10371               | Dajuan              | Addington          | 469                | 555-0065        | Addington.Dajuan-graph@outlook.com       |
+| 10993               | Rashidi             | Agan               | 510                | 555-8530        | Agan.Rashidi-controllers@gmail.com       |
+| 10310               | Karlis              | Aguila             | 743                | 555-7615        | Aguila.Karlis-waiting@yahoo.com          |
+| 10343               | Breda               | Ahmad              | 368                | 555-5696        | Ahmad.Breda-turn@hotmail.com             |
+| 10710               | Martha              | Ahner              | 414                | 555-1272        | Ahner.Martha-physical@hotmail.com        |
+| 10650               | Kimberlyn           | Alber              | 619                | 555-2509        | Alber.Kimberlyn-temporary@icloud.com     |
+| 10288               | Denay               | Alberts            | 847                | 555-5704        | Alberts.Denay-fragrances@icloud.com      |
+| 10989               | Latiesha            | Alderman           | 716                | 555-8154        | Alderman.Latiesha-searching@outlook.com  |
+| 10329               | Porshea             | Alejo              | 952                | 555-6320        | Alejo.Porshea-unknown@outlook.com        |
+| 10441               | Marcy               | Almodovar          | 725                | 555-4951        | Almodovar.Marcy-salon@hotmail.com        |
+| 10996               | Lizeth              | Almodovar          | 548                | 555-4807        | Almodovar.Lizeth-composition@gmail.com   |
+| 10568               | Aicia               | Almonte            | 609                | 555-2147        | Almonte.Aicia-have@yahoo.com             |
+| 10691               | Sade                | Alt                | 989                | 555-5257        | Alt.Sade-passing@outlook.com             |
+| 10445               | Keo                 | Althoff            | 985                | 555-6675        | Althoff.Keo-brooks@hotmail.com           |
+| 10460               | Alta                | Amann              | 418                | 555-9161        | Amann.Alta-univ@icloud.com               |
+| 10327               | Lajoya              | Amato              | 806                | 555-8143        | Amato.Lajoya-invasion@hotmail.com        |
+| 10095               | Adeana              | Amundson           | 513                | 555-4882        | Amundson.Adeana-opposed@yahoo.com        |
++---------------------+---------------------+--------------------+--------------------+-----------------+------------------------------------------+
+25 rows selected (2.123 seconds)
+
+7. Find all contacts that use Yahoo as their email provider?
+
+jdbc:hive2://> select * from contacts where contacts.email like "%@yahoo.com";
+...
+| 10959               | Umair               | Mclain             | 801                | 555-1833        | Mclain.Umair-ambient@yahoo.com             |
+| 10965               | Dania               | Mayor              | 825                | 555-4033        | Mayor.Dania-nyc@yahoo.com                  |
+| 10967               | Keala               | Jellison           | 229                | 555-4163        | Jellison.Keala-parade@yahoo.com            |
+| 10970               | Jolie               | Mccrimmon          | 847                | 555-7786        | Mccrimmon.Jolie-scotland@yahoo.com         |
+| 10972               | Shantrice           | Arruda             | 336                | 555-1930        | Arruda.Shantrice-vinyl@yahoo.com           |
+| 10973               | Jerold              | Salter             | 352                | 555-5885        | Salter.Jerold-mar@yahoo.com                |
+| 10976               | Cindy               | Frink              | 838                | 555-8824        | Frink.Cindy-financing@yahoo.com            |
+| 10981               | Juanito             | Renshaw            | 208                | 555-1714        | Renshaw.Juanito-payday@yahoo.com           |
+| 10995               | Marrio              | Cantor             | 770                | 555-3244        | Cantor.Marrio-bali@yahoo.com               |
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------------------+
+209 rows selected (0.562 seconds)
+
+8. Select the person with the first name 'Brihany' and the last name 'Strang'?
+
+jdbc:hive2://> select * from contacts where contacts.firstname = "Brihany" and contacts.lastname = "Strang";
+23/12/07 01:52:52 [c55ccdef-331e-4710-989d-687f14931599 main]: WARN optimizer.SimpleFetchOptimizer: Cannot determine basic stats for table: contacts@contacts from metastore. Falling back.
+OK
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------+
+| contacts.contactid  | contacts.firstname  | contacts.lastname  | contacts.areacode  | contacts.phone  |         contacts.email         |
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------+
+| 10020               | Brihany             | Strang             | 508                | 555-7155        | Strang.Brihany-read@yahoo.com  |
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------+
+1 row selected (0.601 seconds)
+
+9. Select the person with the area code of "249", the phone number of '555-9934' and the last name of 'Falconer'?
+
+jdbc:hive2://> select * from contacts where contacts.areacode = "249" and contacts.phone = "555-9934" and contacts.lastname = "Falconer" ;
+23/12/07 01:53:59 [c55ccdef-331e-4710-989d-687f14931599 main]: WARN optimizer.SimpleFetchOptimizer: Cannot determine basic stats for table: contacts@contacts from metastore. Falling back.
+OK
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------------------+
+| contacts.contactid  | contacts.firstname  | contacts.lastname  | contacts.areacode  | contacts.phone  |               contacts.email               |
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------------------+
+| 10612               | Alexzandria         | Falconer           | 249                | 555-9934        | Falconer.Alexzandria-volunteers@yahoo.com  |
++---------------------+---------------------+--------------------+--------------------+-----------------+--------------------------------------------+
+1 row selected (0.523 seconds)
+
+10. Select all contacts in UT area codes?
+
+jdbc:hive2://> select * from contacts where contacts.areacode in ("801", "385", "435");
+...
++---------------------+---------------------+--------------------+--------------------+-----------------+----------------------------------------+
+| contacts.contactid  | contacts.firstname  | contacts.lastname  | contacts.areacode  | contacts.phone  |             contacts.email             |
++---------------------+---------------------+--------------------+--------------------+-----------------+----------------------------------------+
+| 10350               | Gurpreet            | Kyle               | 435                | 555-4341        | Kyle.Gurpreet-specialists@icloud.com   |
+| 10494               | Cori                | Clapper            | 435                | 555-9720        | Clapper.Cori-loads@outlook.com         |
+| 10559               | Nikol               | Neri               | 801                | 555-1833        | Neri.Nikol-harbour@yahoo.com           |
+| 10582               | Eyad                | Horner             | 385                | 555-5971        | Horner.Eyad-hoping@hotmail.com         |
+| 10657               | Zabrina             | Wickline           | 385                | 555-5971        | Wickline.Zabrina-html@yahoo.com        |
+| 10666               | Hilario             | Mccree             | 435                | 555-3246        | Mccree.Hilario-rare@hotmail.com        |
+| 10766               | Rakeem              | Wiesner            | 435                | 555-3246        | Wiesner.Rakeem-westminster@icloud.com  |
+| 10959               | Umair               | Mclain             | 801                | 555-1833        | Mclain.Umair-ambient@yahoo.com         |
++---------------------+---------------------+--------------------+--------------------+-----------------+----------------------------------------+
+8 rows selected (2.076 seconds)
